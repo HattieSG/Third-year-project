@@ -8,8 +8,9 @@ if __name__ == "__main__":
     try:
         print("Connecting to board 1...")
         ser = serial.Serial('COM5', 57600)
-        # print("Connecting to board 2...")
-        # ser2 = serial.Serial('COM6', 57600)
+        print("Connecting to board 2...")
+        ser2 = serial.Serial('COM6', 57600)
+        
     # If there is a failure to connect end the program
     except:
         print("Failed to connect")
@@ -17,9 +18,9 @@ if __name__ == "__main__":
 
     # Run the code until ctrl+c is pressed then close the connection
     try:
+        print("Connected!")
         # Initialise lists to store the last 10 values from each of the sensors
-        sensor1 = np.asarray([255]*10)
-        sensor2 = np.asarray([255]*10)
+        sensors = np.asarray([np.asarray([255]*10)]*4)
         
         # Run an infinite loop
         while True:
@@ -31,25 +32,22 @@ if __name__ == "__main__":
                 decoded = (hello.decode("utf-8"))
                 # Split the message by underscoreses to extract the reading from each sensor
                 sensor_readings = decoded[:-1].split("_") # Remove the last character ("\n")
-                # Append the sensor readings to the list for each sensor
-                sensor1[i] = float(sensor_readings[0])
-                sensor2[i] = float(sensor_readings[1])
-                #print(f"Sensor1: {sensor1}")
-                #print(f"Sensor2: {sensor2}")
+                # Iterate through all sensor readings
+                for j in range(0,len(sensor_readings)):
+                    sensors[j,i] = sensor_readings[j]
+                # Create a counter to count the number of sensors that are on
+                on_ctr = 0
+                # Iterate throug each sensor
+                for i in range(0,4):
+                    # If the average for the past second of readings is great than 290, count sensor as on
+                    if np.mean(sensors[i,:]) > 275:
+                        # Iterate count of on sensors
+                        on_ctr+=1
+                # Write to the arduino the number of sensors under pressure
+                ser2.write(str(on_ctr).encode())
+                print(on_ctr)
+                print(ser2.readline())
                 
-                # If either sensor is experiencing pressure print to the console!
-                if (np.mean(sensor1) > 265 and np.mean(sensor2) > 265):
-                    print("Both sensors are on!")
-                elif (np.mean(sensor1) > 265):
-                    print("Sensor1 on!")
-                elif (np.mean(sensor2) > 265):
-                    print("Sensor2 on!")
-                else:
-                    print("...")
-                    
-                    #ser2.write(str(2).encode())
-                    #ser2.write(str(1).encode())
-                    #ser2.write(str(3).encode())
     # When ctrl+c is pressed close the port
     except KeyboardInterrupt:
         print ('Caught KeyboardInterrupt')
@@ -57,4 +55,4 @@ if __name__ == "__main__":
         print("Unexpected error:", sys.exc_info()[0])
     finally:
         ser.close()
-        # ser2.close()
+        ser2.close()
