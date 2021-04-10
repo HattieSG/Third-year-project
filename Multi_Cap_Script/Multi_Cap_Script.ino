@@ -67,7 +67,7 @@ void loop()
     Serial.print(data);
     // A newline is printed after data from the final sensor
     Serial.print("\n");
-    delay(100); // Change this if you are getting values too quickly
+    delay(10); // Change this if you are getting values too quickly
 }
 
 
