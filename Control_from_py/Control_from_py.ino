@@ -1,7 +1,7 @@
 void setup() {
   Serial.begin(57600);  // start serial for output
   Serial.flush();
-  
+
   pinMode(13, OUTPUT); // Green 1
   pinMode(12, OUTPUT); // Green 2
   pinMode(11, OUTPUT); // Yellow
@@ -12,7 +12,7 @@ void loop() {
   int in = Serial.read();
   Serial.print(in);
   Serial.print("\n");
-  
+
   // If 0 is recieved from python show no LEDs
   if (in == 48) {
     digitalWrite(13, LOW);
@@ -48,5 +48,5 @@ void loop() {
     digitalWrite(11, HIGH);
     digitalWrite(10, HIGH);
   }
-  delay(100);
+  delay(10);
 }
