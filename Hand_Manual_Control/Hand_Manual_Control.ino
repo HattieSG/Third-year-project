@@ -88,13 +88,13 @@ void key1(int A_ph, int B_ph, int C_ph, int D_ph, int A_en, int B_en, int C_en, 
 void key2(int A_ph, int B_ph, int C_ph, int D_ph, int A_en, int B_en, int C_en, int D_en, char customKey) {
   // Set the direction of thumb and first finger
   digitalWrite(C_ph, HIGH); 
-  digitalWrite(D_ph, HIGH);
+  //digitalWrite(D_ph, HIGH);
   // Set the speed of thumb and first finger
   analogWrite(C_en, 150);   
-  analogWrite(D_en, 60); 
+  //analogWrite(D_en, 60); 
   return;
 }
-// Key3 and Key4 will be to stop all movement.
+// Key3 will be to stop all movement.
 void key3(int A_ph, int B_ph, int C_ph, int D_ph, int A_en, int B_en, int C_en, int D_en, char customKey) {
   // Set the motor movement for all fingers to 0
   digitalWrite(A_en, LOW);  
@@ -103,12 +103,11 @@ void key3(int A_ph, int B_ph, int C_ph, int D_ph, int A_en, int B_en, int C_en, 
   digitalWrite(D_en, LOW);
   return;
 }
+// Key4 will close only the first finger
 void key4(int A_ph, int B_ph, int C_ph, int D_ph, int A_en, int B_en, int C_en, int D_en, char customKey) {
-  // Set the motor movement for all fingers to 0
-  digitalWrite(A_en, LOW);   
-  digitalWrite(B_en, LOW);   
-  digitalWrite(C_en, LOW);   
-  digitalWrite(D_en, LOW);
-
+  // Set the direction of thumb and first finger
+  digitalWrite(C_ph, LOW); 
+  // Set the speed of thumb and first finger
+  analogWrite(C_en, 100);    
   return;
 }
