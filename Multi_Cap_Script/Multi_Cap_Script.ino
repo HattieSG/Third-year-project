@@ -52,21 +52,21 @@ void loop()
     data = readDataFromSensor(i2cAddress);
     Serial.print(data);
     // Data from each sensor is separated by an underscore
-    Serial.print("_");
-
-    // Reading data from sensor 3
-    i2cAddress = 0x08;
-    data = readDataFromSensor(i2cAddress);
-    Serial.print(data);
-    // Data from each sensor is separated by an underscore
-    Serial.print("_");
-
-    // Reading data from sensor 4
-    i2cAddress = 0x09;
-    data = readDataFromSensor(i2cAddress);
-    Serial.print(data);
-    // A newline is printed after data from the final sensor
     Serial.print("\n");
+
+//    // Reading data from sensor 3
+//    i2cAddress = 0x08;
+//    data = readDataFromSensor(i2cAddress);
+//    Serial.print(data);
+//    // Data from each sensor is separated by an underscore
+//    Serial.print("_");
+//
+//    // Reading data from sensor 4
+//    i2cAddress = 0x09;
+//    data = readDataFromSensor(i2cAddress);
+//    Serial.print(data);
+//    // A newline is printed after data from the final sensor
+//    Serial.print("\n");
     delay(10); // Change this if you are getting values too quickly
 }
 
