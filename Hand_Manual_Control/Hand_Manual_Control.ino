@@ -76,20 +76,20 @@ void loop() {
 
 // Key1 will have the thumb and first finger contract
 void key1(int A_ph, int B_ph, int C_ph, int D_ph, int A_en, int B_en, int C_en, int D_en, char customKey) {
- 
+  // Set the direction of thumb and first finger
   digitalWrite(C_ph, LOW); 
   digitalWrite(D_ph, LOW);
-  
+  // Set the speed of thumb and first finger
   analogWrite(C_en, 150);   
   analogWrite(D_en, 100); 
   return;
 }
 // Key2 will have the thumb and first finger retract
 void key2(int A_ph, int B_ph, int C_ph, int D_ph, int A_en, int B_en, int C_en, int D_en, char customKey) {
-
+  // Set the direction of thumb and first finger
   digitalWrite(C_ph, HIGH); 
   digitalWrite(D_ph, HIGH);
-  
+  // Set the speed of thumb and first finger
   analogWrite(C_en, 150);   
   analogWrite(D_en, 60); 
   return;
