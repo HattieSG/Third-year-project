@@ -60,41 +60,43 @@ if __name__ == "__main__":
         sensors = np.asarray([np.asarray([255]*10)]*2)
         
         while True:
-            # Iterate a counter in cycles of 10 to store output values for the last second
-            for i in range(0,10):
-                # Read the raw data from the sensor
-                hello = ser.readline()
-                # Decode the message
-                decoded = (hello.decode("utf-8"))
-                # Split the message by underscoreses to extract the reading from each sensor
-                sensor_readings = decoded[:-1].split("_") # Remove the last character ("\n")
-                # Iterate through all sensor readings and save
-                for j in range(0,len(sensor_readings)):
-                    sensors[j,i] = sensor_readings[j]
-                
-                # If the user input is one save the data as a grasp
-                if user_input == "1":
-                    print("Grasp!")
-                    # Create the row of values for the csv
-                    row = ([np.mean(sensors[0,:])] + sensors[0,:].tolist() + 
-                           [np.mean(sensors[1,:])] + sensors[1,:].tolist() + 
-                           [user_input] + [str(datetime.datetime.now())])
-                    print(row)
-                    # Append the values to the csv
-                    df = df.append(pd.Series(row, index = df.columns),
-                                   ignore_index=True)
-                    user_input = ""
-                
-                # 
-                if user_input =="0":
-                    print("Fail grasp!")
-                    row = ([np.mean(sensors[0,:])] + sensors[0,:].tolist() + 
-                           [np.mean(sensors[1,:])] + sensors[1,:].tolist() + 
-                           [user_input] + [str(datetime.datetime.now())])
-                    print(row)
-                    df = df.append(pd.Series(row, index = df.columns),
-                                   ignore_index=True)
-                    user_input = ""
+            # Read the raw data from the sensor
+            hello = ser.readline()
+            # Decode the message
+            decoded = (hello.decode("utf-8"))
+            # Split the message by underscoreses to extract the reading from each sensor
+            sensor_readings = decoded[:-1].split("_") # Remove the last character ("\n")
+            # Iterate through all sensor readings and save
+            for j in range(0,len(sensor_readings)):
+                # Append the current value to the appropriate array, and remove the last value
+                sensors[j] = np.append(np.delete(sensors[j], 0), sensor_readings[j])
+            
+            # If the user input is one save the data as a grasp
+            if user_input == "1":
+                print("Grasp!")
+                # Create the row of values for the csv
+                row = ([np.mean(sensors[0,:])] + sensors[0,:].tolist() + 
+                       [np.mean(sensors[1,:])] + sensors[1,:].tolist() + 
+                       [user_input] + [str(datetime.datetime.now())])
+                print(row)
+                # Append the values to the csv
+                df = df.append(pd.Series(row, index = df.columns),
+                               ignore_index=True)
+                # Reset the user input
+                user_input = ""
+            # If the user input is two save the data as fail grasp
+            if user_input =="0":
+                print("Fail grasp!")
+                # Create the row of values for the csv
+                row = ([np.mean(sensors[0,:])] + sensors[0,:].tolist() + 
+                       [np.mean(sensors[1,:])] + sensors[1,:].tolist() + 
+                       [user_input] + [str(datetime.datetime.now())])
+                print(row)
+                # Append the values to the csv
+                df = df.append(pd.Series(row, index = df.columns),
+                               ignore_index=True)
+                # Reset the user input
+                user_input = ""
                     
     except KeyboardInterrupt:
         print ('Caught KeyboardInterrupt')
