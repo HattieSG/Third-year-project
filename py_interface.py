@@ -10,9 +10,9 @@ if __name__ == "__main__":
     # Attempt to connect to the port with the arduino & sensors
     try:
         print("Connecting to board 1...")
-        ser = serial.Serial('COM3', 57600)
+        ser = serial.Serial('COM5', 57600)
         print("Connecting to board 2...")
-        ser2 = serial.Serial('COM5', 9600)        
+        ser2 = serial.Serial('COM3', 9600)        
     # If there is a failure to connect end the program
     except:
         print("Failed to connect")
