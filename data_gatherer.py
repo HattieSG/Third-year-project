@@ -68,7 +68,7 @@ if __name__ == "__main__":
             sensor_readings = decoded[:-1].split("_") # Remove the last character ("\n")
             # Iterate through all sensor readings and save
             for j in range(0,len(sensor_readings)):
-                # Append the current value to the appropriate array, and remove the last value
+                # Append the current value to the appropriate array, and remove the oldest value
                 sensors[j] = np.append(np.delete(sensors[j], 0), sensor_readings[j])
             
             # If the user input is one save the data as a grasp
@@ -106,7 +106,7 @@ if __name__ == "__main__":
     finally:
         print("Program ended.")
         print("Please restart the terminal.")
-        df.to_csv("pinch_data.csv")
+        df.to_csv("pinch_data.csv", index=False)
         ser.close()
         sys.exit()
         
