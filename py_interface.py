@@ -10,9 +10,9 @@ if __name__ == "__main__":
     # Attempt to connect to the port with the arduino & sensors
     try:
         print("Connecting to board 1...")
-        ser = serial.Serial('COM7', 57600)
+        ser = serial.Serial('COM3', 57600)
         print("Connecting to board 2...")
-        ser2 = serial.Serial('COM8', 9600)        
+        ser2 = serial.Serial('COM5', 9600)        
     # If there is a failure to connect end the program
     except:
         print("Failed to connect")
@@ -34,6 +34,9 @@ if __name__ == "__main__":
         # Initialise lists to store the last 10 values from each of the sensors
         sensors = np.asarray([np.asarray([255]*10)]*2)
         
+        # Initialise a counter to determine number of grasp predictions in a row
+        grasp_ctr = 0
+        
         # Run an infinite loop
         while True:
             # Read the raw data from the sensor
@@ -51,8 +54,18 @@ if __name__ == "__main__":
             X = np.concatenate((sensors[0,:], sensors[1,:]), axis=None)
             # Query the model using the sensor values
             pred = model.predict(X.reshape(1,-1)) # Reshape array as only one sample
-            # Write the model output to the board            
-            ser2.write(str(pred[0]).encode())
+            # Write the model output to the board      
+            print(pred[0])
+            # Check if the grasp is 0, if it is reset the counter
+            if pred[0] == 0:
+                grasp_ctr = 0
+            # If it is not zero increase the value by one
+            elif pred[0] == 1:
+                grasp_ctr += 1
+            # Once 5 grasps have been predicted in a row send the command to the hand to stop moving
+            if grasp_ctr == 5:
+                ser2.write(str(1).encode())
+                grasp_ctr = 0
             
     # When ctrl+c is pressed close the port
     except KeyboardInterrupt:
